@@ -40,10 +40,10 @@ I have a two-monitor setup and I run steam games on "HDMI-A-1" device which you 
 I have remmed two other commandlines and swapping between those then im testing different setups.<br>
 One commandline sends a testscreen to twitch and the other sends the captured data into a mp4 file.<br>
 
-Dont forget to make the scriptfile executeable with
-chmod +x start-stream.sh
-
-And start it with:
-./start-stream.sh
+Dont forget to make the scriptfile executeable with<br>
+chmod +x start-stream.sh<br>
+<br>
+And start it with:<br>
+./start-stream.sh<br><p>
 
 
