@@ -4,7 +4,7 @@
 <h1>Stream on void linux with wayland</h1>
 
 This is a shell/bash script to send a videostream to twitch.<br>
-I use void linux but it can be used on all linux platforms.<br>
+I use void linux but it can be used on all *nix platforms if configured right.<br>
 <p>
 Details of my void install are:<br>
 void linux x86_x64<br>
