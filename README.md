@@ -6,11 +6,11 @@
 This is a shell/bash script to send a videostream to twitch.<br>
 I use void linux but it can be used on all linux platforms.<br>
 <p>
-Details of my void install are:
-void linux x86_x64
-sddm display manager
-kde plasma windows manager
-wayland setup launching from sddm (kwin_wayland)
+Details of my void install are:<br>
+void linux x86_x64<br>
+sddm display manager<br>
+kde plasma windows manager<br>
+wayland setup launching from sddm (kwin_wayland)<br>
 <p>
 
 first create this;
@@ -18,18 +18,18 @@ first create this;
 create a file called stream.key which contains your twitchkey.
 
 
+<p></p>
 
 
+#install the following<br>
 
-#install the following
+xbps-install gpu-screen-recorder<br>
 
-xbps-install gpu-screen-recorder
+xbps-install gpu-screen-recorder-notification<br>
 
-xbps-install gpu-screen-recorder-notification
+xbps-install gpu-screen-recorder-ui<br>
 
-xbps-install gpu-screen-recorder-ui
-
-xbps-install ffmpeg
+xbps-install ffmpeg<br>
 
 
 #I find these installs to be helpful in this content
