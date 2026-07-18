@@ -1,17 +1,17 @@
 <a href="https://repo-default.voidlinux.org/">
 <img src="void_button.gif" alt="Description"></a>
 
-<h1>VOID LINUX</h1>
+<h1>Stream with void linux</h1>
 
-This is a shell/bash script to send a videostream to twitch.
-I use void linux but it can be used on all linux platforms.
-
+This is a shell/bash script to send a videostream to twitch.<br>
+I use void linux but it can be used on all linux platforms.<br>
+<p>
 Details of my void install are:
 void linux x86_x64
 sddm display manager
 kde plasma windows manager
 wayland setup launching from sddm (kwin_wayland)
-
+<p>
 
 first create this;
 
