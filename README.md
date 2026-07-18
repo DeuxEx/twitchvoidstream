@@ -1,7 +1,7 @@
 <a href="https://repo-default.voidlinux.org/">
 <img src="void_button.gif" alt="Description"></a>
 
-<h1>Stream with void linux with wayland</h1>
+<h1>Stream on void linux with wayland</h1>
 
 This is a shell/bash script to send a videostream to twitch.<br>
 I use void linux but it can be used on all linux platforms.<br>
