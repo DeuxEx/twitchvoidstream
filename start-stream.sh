@@ -57,6 +57,7 @@ framerate="60"
 
 
 #stream to twitch
+#Use ffmpeg to stream to an RTMP server, continue processing the stream at real-time rate even in case of temporary failure (network outage) and attempt to recover streaming every second indefinitely:
 gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec -cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes | ffmpeg -re -i - -c:v libx264 -c:a aac -f fifo -fifo_format flv -drop_pkts_on_overflow 1 -attempt_recovery 1 -recovery_wait_time 1 -map 0:v -map 0:a $platform/$keyvalue
 
 
