@@ -22,28 +22,23 @@ create a file called stream.key which contains your twitchkey.
 
 
 #install the following<br>
-
 xbps-install gpu-screen-recorder<br>
-
 xbps-install gpu-screen-recorder-notification<br>
-
 xbps-install gpu-screen-recorder-ui<br>
-
 xbps-install ffmpeg<br>
 
 
-#I find these installs to be helpful in this content
+#I find these installs to be helpful in this content<br>
 
-xbps-install mediainfo-cli-26.05_1
-
-xbps-install rtmpdump-2.4.20161210_10
-
+xbps-install mediainfo-cli<br>
+xbps-install rtmpdump<br>
 
 
-I have a two-monitor setup and I run steam games on "HDMI-A-1" device which you can see in the variables in ths script, you can change to other options.
 
-I have remmed two other commandlines and swapping between those then im testing different setups.
-One commandline sends a testscreen to twitch and the other sends the captured data into a mp4 file.
+I have a two-monitor setup and I run steam games on "HDMI-A-1" device which you can see in the variables in ths script, you can change to other options.<br>
+
+I have remmed two other commandlines and swapping between those then im testing different setups.<br>
+One commandline sends a testscreen to twitch and the other sends the captured data into a mp4 file.<br>
 
 
 
