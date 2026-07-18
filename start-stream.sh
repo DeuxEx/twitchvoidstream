@@ -35,9 +35,9 @@ colorrange="limited"
 framerate="60"
 
 #-k codec
-#              Video codec: auto, h264, hevc, av1, vp8, vp9, hevc_hdr, av1_hdr,
-#              hevc_10bit, av1_10bit (default: auto → h264). HDR options not
-#              available on X11 or portal capture.
+# Video codec: auto, h264, hevc, av1, vp8, vp9, hevc_hdr, av1_hdr,
+# hevc_10bit, av1_10bit (default: auto → h264). HDR options not
+# available on X11 or portal capture.
 
 
 
@@ -46,26 +46,27 @@ framerate="60"
 # -i input file url
 # -i - = standard input
 
-#output to file
-#$ gpu-screen-recorder -w portal -o [path/to/video.mp4]
 
 
 #gpu-screen-recorder -w $capturedevice -c $videocodec -s $resolution -bm cbr -q $quality -encoder gpu -ab $audiobitrate  -f $framerate -a default_output |
 # ffmpeg -i - -f mpegts -c:a copy -f flv $platform/$streamkey
 
 
-#dump till file
+#output to file
 #gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec -cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes -o /home/void/testrun.mp4
 
-#stream till twitch
+
+#stream to twitch
 gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec -cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes | ffmpeg -re -i - -c:v libx264 -c:a aac -f fifo -fifo_format flv -drop_pkts_on_overflow 1 -attempt_recovery 1 -recovery_wait_time 1 -map 0:v -map 0:a $platform/$keyvalue
+
 
 #stop the stream after stop with ctrl-z
 killall ffmpeg
 
-# -re = read input frame rate
-
 
 #testsignal
 #ffmpeg -re -f lavfi -i testsrc2=size=$resolution -f lavfi -i aevalsrc="sin(0*2*PI*t)" -vcodec libx264 -r 30 -g 30 -preset fast -vb 3000k -pix_fmt rgb24 -pix_fmt yuv420p -f flv $platform/$keyvalue
+
+
+
 
