@@ -1,5 +1,14 @@
 This is a shell/bash script to send a videostream to twitch.
-I use void linux but it can be used on all linux platforms, maybe even on windows.
+I use void linux but it can be used on all linux platforms.
+
+Details of my void install are:
+void linux x86_x64
+sddm display manager
+kde plasma windows manager
+wayland setup launching from sddm (kwin_wayland)
+
+
+first create this;
 
 create a file called stream.key which contains your twitchkey.
 
