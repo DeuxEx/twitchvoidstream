@@ -40,7 +40,7 @@ framerate="60"
 startposx="200"
 startposy="200"
 #default; boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2
-textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile=streamtext.txt:reload=1:fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=$startposx:y=$startposy"
+textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile=streamtext.txt:reload=10:fontcolor=white:fontsize=36:box=1:boxcolor=black@0.5:boxborderw=5:x=$startposx:y=$startposy"
 
 
 
@@ -68,15 +68,23 @@ textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile
 #gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec -cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes -o /home/void/testrun.mp4
 
 #stream till twitch
-gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec -cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes | ffmpeg -re -i - -c:v h264_nvenc -c:a aac -threads 3 -vf $textfield -flags:v +global_header -g $framerate -bufsize 6000k -f fifo -fifo_format flv -drop_pkts_on_overflow 1 -attempt_recovery 1 -recovery_wait_time 1 -map 0:v -map 0:a $platform/$keyvalue
+gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec \
+-cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes \
+| ffmpeg -re -i - -c:v h264_nvenc -c:a aac -threads 3 \
+-vf $textfield \
+-flags:v +global_header -g $framerate -bufsize 6000k \
+-f fifo -fifo_format flv -drop_pkts_on_overflow 1 -attempt_recovery 1 -recovery_wait_time 1 -map 0:v -map 0:a $platform/$keyvalue
 
 #stop the stream after stop with ctrl-z
 killall ffmpeg
 
 # -re = read input frame rate
 #-c:v libx264, h264_nvenc
+
+#-c:v h264_nvenc
 #-c:a aac
 
 #testsignal
 #ffmpeg -re -f lavfi -i testsrc2=size=$resolution -f lavfi -i aevalsrc="sin(0*2*PI*t)" -vcodec libx264 -r 30 -g 30 -preset fast -vb 3000k -pix_fmt rgb24 -pix_fmt yuv420p -f flv $platform/$keyvalue
+
 
