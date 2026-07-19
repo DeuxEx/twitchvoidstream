@@ -63,11 +63,11 @@ textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile
 # ffmpeg -i - -f mpegts -c:a copy -f flv $platform/$streamkey
 
 
-#dump till file
+#dump to file
 #gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec -cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes -o /home/void/testrun.mp4
 
 
-#stream till twitch
+#stream to twitch
 while $true
 do
 gpu-screen-recorder \
@@ -114,6 +114,4 @@ killall ffmpeg
 
 #testsignal
 #ffmpeg -re -f lavfi -i testsrc2=size=$resolution -f lavfi -i aevalsrc="sin(0*2*PI*t)" -vcodec libx264 -r 30 -g 30 -preset fast -vb 3000k -pix_fmt rgb24 -pix_fmt yuv420p -f flv $platform/$keyvalue
-
-
 
