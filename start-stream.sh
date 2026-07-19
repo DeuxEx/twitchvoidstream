@@ -1,4 +1,3 @@
-
 #script to start twitchstream on capturedevice
 #run this cmd to bypass authentication every time
 #gsr info: gsr_kms_client_init: gsr-kms-server is missing sys_admin cap and will require root authentication.
@@ -67,13 +66,42 @@ textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile
 #dump till file
 #gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec -cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes -o /home/void/testrun.mp4
 
+
 #stream till twitch
-gpu-screen-recorder -ab $audiobitrate -w $capturedevice -c $format -s $resolution -bm cbr -q $quality -ac $audiocodec \
--cursor no -cr $colorrange -k $videocodec -encoder gpu -f $framerate -a default_output -restore-portal-session yes \
-| ffmpeg -re -i - -c:v h264_nvenc -c:a aac -threads 3 \
+while $true
+do
+gpu-screen-recorder \
+-ab $audiobitrate \
+-w $capturedevice \
+-c $format \
+-s $resolution \
+-bm cbr \
+-q $quality \
+-ac $audiocodec \
+-cursor no \
+-cr $colorrange \
+-k $videocodec \
+-encoder gpu \
+-f $framerate \
+-a default_output \
+-restore-portal-session yes \
+| ffmpeg -re -i - \
+-c:v h264_nvenc \
+-c:a aac \
+-threads 3 \
 -vf $textfield \
--flags:v +global_header -g $framerate -bufsize 6000k \
--f fifo -fifo_format flv -drop_pkts_on_overflow 1 -attempt_recovery 1 -recovery_wait_time 1 -map 0:v -map 0:a $platform/$keyvalue
+-flags:v +global_header \
+-g $framerate \
+-bufsize 6000k \
+-f fifo -fifo_format flv \
+-drop_pkts_on_overflow 1 \
+-attempt_recovery 1 \
+-recovery_wait_time 1 \
+-map 0:v -map 0:a \
+$platform/$keyvalue
+done
+
+
 
 #stop the stream after stop with ctrl-z
 killall ffmpeg
@@ -86,5 +114,6 @@ killall ffmpeg
 
 #testsignal
 #ffmpeg -re -f lavfi -i testsrc2=size=$resolution -f lavfi -i aevalsrc="sin(0*2*PI*t)" -vcodec libx264 -r 30 -g 30 -preset fast -vb 3000k -pix_fmt rgb24 -pix_fmt yuv420p -f flv $platform/$keyvalue
+
 
 
