@@ -44,6 +44,7 @@ textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile
 
 
 
+
 # -f format
 # -i input file url
 # -i - = standard input
@@ -88,10 +89,10 @@ gpu-screen-recorder \
 -correct_ts_overflow 1 \
 -i - \
 $(: Här börjar koden för att visa bild och textfält inledningsvis i streamen ) \
--loop 1 -i "/sökväg/till/din/bild.png" \
--filter_complex "[0:v]$textfield[game];[game][1:v]overlay=enable='lt(t,10)'[outv]" \
--map "[outv]" -map 0:a \
-$(-vf $textfield) \
+-loop 1 -i "/home/void/deux-start-logo.jpeg" \
+-filter_complex "[0:v]$textfield[game];[1:v]scale=$resolution[scaled_img];[game][scaled_img]overlay=enable='lt(t,15)'[outv]" \
+-map "[outv]" \
+-map 0:a \
 -c:v h264_nvenc \
 -profile:v high \
 -preset:v p4 \
@@ -107,7 +108,6 @@ $(-vf $textfield) \
 -drop_pkts_on_overflow 1 \
 -attempt_recovery 1 \
 -recovery_wait_time 1 \
--map 0:v -map 0:a \
 $platform/$keyvalue
 
 
@@ -122,4 +122,5 @@ killall ffmpeg
 
 #testsignal
 #ffmpeg -re -f lavfi -i testsrc2=size=$resolution -f lavfi -i aevalsrc="sin(0*2*PI*t)" -vcodec libx264 -r 30 -g 30 -preset fast -vb 3000k -pix_fmt rgb24 -pix_fmt yuv420p -f flv $platform/$keyvalue
+
 
