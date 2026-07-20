@@ -36,18 +36,11 @@ framerate="60"
 
 #add text to stream?
 #ffmpeg -i input.mp4 -vf "drawtext=fontfile=/path/to/font.ttf:textfile=text.txt:reload=1:fontcolor=white:fontsize=24:box=1:boxcolor=black@0.5:boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2" -codec:a copy output.mp4
+
 startposx="200"
 startposy="200"
 #default; boxborderw=5:x=(w-text_w)/2:y=(h-text_h)/2
 textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile=streamtext.txt:reload=10:fontcolor=white:fontsize=36:box=1:boxcolor=black@0.5:boxborderw=5:x=$startposx:y=$startposy"
-
-
-
-#-k codec
-#              Video codec: auto, h264, hevc, av1, vp8, vp9, hevc_hdr, av1_hdr,
-#              hevc_10bit, av1_10bit (default: auto → h264). HDR options not
-#              available on X11 or portal capture.
-
 
 
 
@@ -68,39 +61,54 @@ textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile
 
 
 #stream to twitch
-while $true
-do
+#while $true
+#do
+
+#done
+
+
+
 gpu-screen-recorder \
--ab $audiobitrate \
 -w $capturedevice \
--c $format \
+-c flv \
 -s $resolution \
--bm cbr \
--q $quality \
--ac $audiocodec \
+-bm qp \
+-q ultra \
+-ac aac \
 -cursor no \
 -cr $colorrange \
--k $videocodec \
+-k h264 \
 -encoder gpu \
 -f $framerate \
 -a default_output \
 -restore-portal-session yes \
-| ffmpeg -re -i - \
+| ffmpeg \
+-re \
+-thread_queue_size 2048 \
+-correct_ts_overflow 1 \
+-i - \
+$(: Här börjar koden för att visa bild och textfält inledningsvis i streamen ) \
+-loop 1 -i "/sökväg/till/din/bild.png" \
+-filter_complex "[0:v]$textfield[game];[game][1:v]overlay=enable='lt(t,10)'[outv]" \
+-map "[outv]" -map 0:a \
+$(-vf $textfield) \
 -c:v h264_nvenc \
--c:a aac \
--threads 3 \
--vf $textfield \
--flags:v +global_header \
--g $framerate \
+-profile:v high \
+-preset:v p4 \
+-tune:v hq \
+-b:v 6000k \
+-maxrate:v 6000k \
 -bufsize 6000k \
+-g $framerate \
+-c:a copy \
+-threads 3 \
+-flags:v +global_header \
 -f fifo -fifo_format flv \
 -drop_pkts_on_overflow 1 \
 -attempt_recovery 1 \
 -recovery_wait_time 1 \
 -map 0:v -map 0:a \
 $platform/$keyvalue
-done
-
 
 
 #stop the stream after stop with ctrl-z
