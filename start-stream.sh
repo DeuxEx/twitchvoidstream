@@ -5,6 +5,11 @@
 #To bypass this automatically, run:
 #sudo setcap cap_sys_admin+ep '/usr/bin/gsr-kms-server'
 
+
+# Force the loop to react if GSR or FFmpeg crashes
+set -o pipefail
+
+
 echo "Reading streamkey..."
 # Read the file content and export it as a global variable
 export keyvalue=$(cat stream.key)
@@ -62,11 +67,11 @@ textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:textfile
 
 
 #stream to twitch
-#while $true
-#do
 
-#done
-
+# change to true (without $) for a eternal loop
+while true
+do
+    echo "[$(date +%T)] Starting the stream..."
 
 
 gpu-screen-recorder \
@@ -85,34 +90,56 @@ gpu-screen-recorder \
 -restore-portal-session yes \
 | ffmpeg \
 -re \
--thread_queue_size 2048 \
+-thread_queue_size 4096 \
 -correct_ts_overflow 1 \
 -i - \
-$(: Här börjar koden för att visa bild och textfält inledningsvis i streamen ) \
--loop 1 -i "/home/void/deux-start-logo.jpeg" \
+-loop 1 \
+-i "/home/void/deux-start-logo.jpeg" \
 -filter_complex "[0:v]$textfield[game];[1:v]scale=$resolution[scaled_img];[game][scaled_img]overlay=enable='lt(t,15)'[outv]" \
 -map "[outv]" \
 -map 0:a \
 -c:v h264_nvenc \
 -profile:v high \
--preset:v p4 \
--tune:v hq \
+-preset:v p2 \
+-tune:v ll \
 -b:v 6000k \
 -maxrate:v 6000k \
--bufsize 6000k \
+-bufsize 12000k \
 -g $framerate \
--c:a copy \
--threads 3 \
+-fps_mode cfr \
+-af aresample=async=1 \
+-c:a aac \
+-b:a 160k \
+-threads 0 \
 -flags:v +global_header \
--f fifo -fifo_format flv \
+-f fifo \
+-fifo_format flv \
 -drop_pkts_on_overflow 1 \
 -attempt_recovery 1 \
 -recovery_wait_time 1 \
 $platform/$keyvalue
 
 
-#stop the stream after stop with ctrl-z
+
+
+
+    # Check if you stopped with purpose (Ctrl+C)
+    exit_status=$?
+    if [ $exit_status -eq 130 ]; then
+        echo "[$(date +%T)] The stream was interrupted by the user. Stopping the loop."
+        break
+    fi
+
+    echo "[$(date +%T)] The stream crashed or was dispatched. (Errorcode: $exit_status)."
+    echo "Waiting 5 secs before the stream tries to auto-respawn..."
+    sleep 5
+done
+
+
+
+
 killall ffmpeg
+killall gpu-screen-recorder
 
 # -re = read input frame rate
 #-c:v libx264, h264_nvenc
@@ -120,7 +147,8 @@ killall ffmpeg
 #-c:v h264_nvenc
 #-c:a aac
 
-#testsignal
+#send testsignal
 #ffmpeg -re -f lavfi -i testsrc2=size=$resolution -f lavfi -i aevalsrc="sin(0*2*PI*t)" -vcodec libx264 -r 30 -g 30 -preset fast -vb 3000k -pix_fmt rgb24 -pix_fmt yuv420p -f flv $platform/$keyvalue
+
 
 
