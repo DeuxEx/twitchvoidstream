@@ -93,6 +93,7 @@ do
 logo_path="/home/void/gpu-scripts/deux-logo1-PERFEKT-test.png"
 start_logo="/home/void/gpu-scripts/deux-start-logo.jpeg"
 
+
 gpu-screen-recorder \
   -w $capturedevice \
   -c flv \
@@ -110,7 +111,9 @@ gpu-screen-recorder \
 | mbuffer -m 64M \
 | ffmpeg \
   -fflags +genpts+igndts \
-  -thread_queue_size 4096 \
+  -thread_queue_size 8192 \
+  -probesize 10M \
+  -analyzeduration 10M \
   -i - \
   -filter_complex "\
 movie='$start_logo',loop=loop=-1:size=1,scale=$resolution,setsar=1[start_img];\
@@ -130,6 +133,7 @@ movie='$logo_path',loop=loop=-1:size=1,format=rgba,scale=200:-1[logo_img];\
   -g $framerate \
   -c:a copy \
   -flvflags no_duration_filesize \
+  -max_error_rate 1.0 \
   -f flv \
   "$platform/$keyvalue"
 
