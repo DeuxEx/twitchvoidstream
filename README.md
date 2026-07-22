@@ -29,7 +29,7 @@ xbps-install ffmpeg<br>
 xbps-install mbuffer<br>
 
 
-#I find these installs to be helpful in this content<br>
+#I find these installs to be helpful in this context<br>
 
 xbps-install mediainfo-cli<br>
 xbps-install rtmpdump<br>
