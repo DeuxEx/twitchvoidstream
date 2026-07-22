@@ -1,21 +1,20 @@
 <a href="https://repo-default.voidlinux.org/">
 <img src="void_button.gif" alt="Description"></a>
 
-<h1>Stream on void linux with wayland</h1>
+<h1>Send datastream from Void Linux (Wayland) to twitch</h1>
 
-This is a shell/bash script to send a videostream to twitch.<br>
 I use void linux but it can be used on all *nix platforms if configured right.<br>
 <p>
-Details of my void install are:<br>
-void linux x86_x64<br>
-sddm display manager<br>
-kde plasma windows manager<br>
-wayland setup launching from sddm (kwin_wayland)<br>
+Details of my Void install are:<br>
+Void Linux x86_x64<br>
+Sddm display manager<br>
+KDE Plasma windows manager<br>
+Wayland setup to launch from sddm (kwin_wayland)<br>
 <p>
 
-first create this;
 
-create a file called stream.key which contains your twitchkey.
+first create this;<br>
+create a file called stream.key which contains your twitchkey.<br>
 
 
 <p></p>
