@@ -10,6 +10,7 @@ Void Linux x86_x64<br>
 Sddm display manager<br>
 KDE Plasma windows manager<br>
 Wayland setup to launch from sddm (kwin_wayland)<br>
+I run a multimonitor setup which OBS Studio cant handle<br>
 <p>
 
 
@@ -45,7 +46,7 @@ xbps-install feh<br>
 Short procedure how everything works<br>
 1. gpu-screen-recorder captures the screen, application etc<br>
 2. the data is piped to a big mbuffer to prevent lag between gpu-screen-recorder and ffmpeg.<br>
-3. the data is piped from mbuffer to ffmpeg and send to twitch<br>
+3. the data is piped from mbuffer to ffmpeg and a startscreen, a logo and a blurred area for chatbox are embedded and send to twitch<br>
 <p></p>
 
 I have a two-monitor setup and I run steam games on "HDMI-A-1" device which you can see in the variables in ths script, you can change to other options.<br>
