@@ -1,4 +1,3 @@
-
 #script to start twitchstream on capturedevice
 #run this cmd to bypass authentication every time
 #gsr info: gsr_kms_client_init: gsr-kms-server is missing sys_admin cap and will require root authentication.
@@ -60,12 +59,15 @@ glitch_textfield="drawtext=fontfile=/usr/share/fonts/TTF/ZillaSlab-Regular.ttf:t
 
 # Stresstest-filter: Lägger på dynamiskt brus + tung gaussisk blur som aktiveras/testas
 stress_filter="noise=alls=15:allf=t+u,$textfield"
-
 blur_box="delogo=x=50:y=800:w=400:h=200:show=0"
 
 
-# Sökväg till din permanenta logotyp (gärna .png med genomskinlig bakgrund)
-logo_path="/home/void/min-logga.png"
+#filter för att visa bildrutan)
+#(-filter_complex "[0:v]$glitch_textfield[game];[1:v]scale=$resolution[scaled_img];[game][scaled_img]overlay=enable='lt(t,15)'[outv]") \
+#(blurred box)
+#(-filter_complex "[0:v]$blur_box[blurred_game];[blurred_game]$textfield[game];[1:v]scale=$resolution[scaled_img];[game][scaled_imgoverlay=enable='lt(t,15)'[outv]") \
+
+
 
 #output to file
 #$ gpu-screen-recorder -w portal -o [path/to/video.mp4]
@@ -88,6 +90,8 @@ do
 
 
 
+logo_path="/home/void/gpu-scripts/deux-logo1-PERFEKT-test.png"
+start_logo="/home/void/gpu-scripts/deux-start-logo.jpeg"
 
 gpu-screen-recorder \
   -w $capturedevice \
@@ -104,24 +108,15 @@ gpu-screen-recorder \
   -a default_output \
   -restore-portal-session yes \
 | ffmpeg \
-  -c:v h264_cuvid \
+  -fflags +genpts+igndts \
   -thread_queue_size 4096 \
   -i - \
-  -loop 1 \
-  -i "/home/void/deux-start-logo.jpeg" \
-$(filter för att visa bildrutan) \
-$(-filter_complex "[0:v]$glitch_textfield[game];[1:v]scale=$resolution[scaled_img];[game][scaled_img]overlay=enable='lt(t,15)'[outv]") \
-$(filter för att stresstesta gpun) \
-$(-filter_complex "[0:v]gblur=sigma=20[heavy_blur];[1:v]scale=$resolution[scaled_img];[heavy_blur][scaled_img]overlay=enable='lt(t,15)'[outv]") \
-$(-filter_complex "[0:v]unsharp=5:5:2.5:5:5:2.5,eq=contrast=1.5:saturation=2.0[heavy_stress];[1:v]scale=$resolution[scaled_img];[heavy_stress][scaled_img]overlay=enable='lt(t,15)'[outv]") \
-$(blurred box) \
-$(-filter_complex "[0:v]$blur_box[blurred_game];[blurred_game]$textfield[game];[1:v]scale=$resolution[scaled_img];[game][scaled_img]overlay=enable='lt(t,15)'[outv]") \
-$(logo filter) \
--filter_complex "[0:v]$textfield[game];\
-[2:v]scale=200:-1[static_logo];\
-[game][static_logo]overlay=x=main_w-overlay_w-30:y=30[game_with_logo];\
-[1:v]scale=$resolution[scaled_start];\
-[game_with_logo][scaled_start]overlay=enable='lt(t,15)'[outv]" \
+  -filter_complex "\
+movie='$start_logo',loop=loop=-1:size=1,scale=$resolution,setsar=1[start_img];\
+movie='$logo_path',loop=loop=-1:size=1,format=rgba,scale=200:-1[logo_img];\
+[0:v]$textfield,setsar=1[game];\
+[game][logo_img]overlay=x=main_w-overlay_w-30:y=30:format=auto[game_with_logo];\
+[game_with_logo][start_img]overlay=enable='lt(t,15)':format=auto[outv]" \
   -map "[outv]" \
   -map 0:a \
   -c:v h264_nvenc \
@@ -139,11 +134,7 @@ $(logo filter) \
 
 
 
-
-
-
-
-    # Kontrollera om du stängde av strömmen med flit (Ctrl+C)
+    # Check if you shut down the stream on purpose (Ctrl+C)
     exit_status=$?
     if [ $exit_status -eq 130 ]; then
         echo "[$(date +%T)] The stream was interrupted by the user. Stopping the loop."
@@ -169,4 +160,5 @@ killall gpu-screen-recorder
 
 #testsignal
 #ffmpeg -re -f lavfi -i testsrc2=size=$resolution -f lavfi -i aevalsrc="sin(0*2*PI*t)" -vcodec libx264 -r 30 -g 30 -preset fast -vb 3000k -pix_fmt rgb24 -pix_fmt yuv420p -f flv $platform/$keyvalue
+
 
